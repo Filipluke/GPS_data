@@ -906,19 +906,20 @@ if __name__ == '__main__':
     # data output
     print(f"Cx = {Cx}")
 
-
+    
 
     
     approx = [a*x +b for x in v2]
-#approx_teoret = [-4.2e-05*x -0.0137 for x in v2]
-plt.plot(v2, approx)
-#plt.plot(v2, approx_teoret)
-plt.plot(v2, dkg, 'o')
 
-print(np.polyfit(v2, dkg, 1))
+#approx_teoret = [-4.2e-05*x -0.0137 for x in v2]
+    plt.plot(v2, approx)
+#plt.plot(v2, approx_teoret)
+    plt.plot(v2, dkg, 'o')
+
+    print(np.polyfit(v2, dkg, 1))
 
 # v(t) [km/h]
 #plt.plot([x/1000 for x in t_8], [x for x in v_8])
 # a(t) [m/s^2]
 #plt.plot([x/1000 for x in t_8[1:]], [x/3.6 for x in dv_8])
-plt.show()
+    plt.show()
