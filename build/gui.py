@@ -1,10 +1,6 @@
-
 from pathlib import Path
-
-# from tkinter import *
-# Explicit imports to satisfy Flake8
+import serial.tools.list_ports
 from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage
-
 import math
 from typing import List, Tuple
 import numpy as np
@@ -72,15 +68,33 @@ def linear_regression(x_vals: List[float], y_vals: List[float]) -> Tuple[float, 
     return r_squared, y_intercept, slope
 
 
+V = []
+keepRunning= True
+
+serialInst = serial.Serial()
+serialInst.baudrate = 9600
+serialInst.port = "COM4"
+serialInst.open()
 
 def Export():
     print("This Button Exports files to excel")
 
-def Break():
-    print("This Button ends loop")
+
 
 def Start():
-    print("This Button starts colecting data")
+    global keepRunning
+    while keepRunning:
+        try:
+            if serialInst.in_waiting:
+                packet = serialInst.readline()
+                print(packet.decode('utf').rstrip('\n'))
+        except serial.SerialException:  # przechwytywanie wyjątku SerialException
+            print("Urządzenie zostało odłączone")
+            keepRunning = False
+def Break():
+    global keepRunning
+    keepRunning = False
+
 
 def calculateCx():
     vraw = [18.844444444444445,
@@ -964,19 +978,6 @@ def calculateCx():
     plt.show()
 
     
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 window.geometry("700x500")
