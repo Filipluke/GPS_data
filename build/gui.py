@@ -5,6 +5,7 @@ import math
 from typing import List, Tuple
 import numpy as np
 import matplotlib.pyplot as plt
+import threading
 
 
 OUTPUT_PATH = Path(__file__).parent
@@ -88,12 +89,17 @@ def Start():
             if serialInst.in_waiting:
                 packet = serialInst.readline()
                 print(packet.decode('utf').rstrip('\n'))
-        except serial.SerialException:  # przechwytywanie wyjątku SerialException
+        except serial.SerialException:  
             print("Urządzenie zostało odłączone")
             keepRunning = False
 def Break():
     global keepRunning
     keepRunning = False
+
+def on_button2_clicked_Start():
+    global keepRunning
+    keepRunning = True
+    threading.Thread(target=Start).start()
 
 
 def calculateCx():
@@ -1187,7 +1193,7 @@ button_2 = Button(
     image=button_image_2,
     borderwidth=0,
     highlightthickness=0,
-    command=lambda: Start(),
+    command=lambda: on_button2_clicked_Start(),
     relief="flat"
 )
 button_2.place(
