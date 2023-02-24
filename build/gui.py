@@ -88,7 +88,11 @@ def Start():
         try:
             if serialInst.in_waiting:
                 packet = serialInst.readline()
-                print(packet.decode('utf').rstrip('\n'))
+                V_decoded = packet.decode('utf').rstrip('\n')
+                print(V_decoded)
+                V.append(V_decoded)
+                
+               
         except serial.SerialException:  
             print("Urządzenie zostało odłączone")
             keepRunning = False
