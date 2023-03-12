@@ -1,13 +1,13 @@
 from pathlib import Path
 import serial.tools.list_ports
-from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage
+from tkinter import *
 import math
 from typing import List, Tuple
 import numpy as np
 import matplotlib.pyplot as plt
 import threading
-
-
+import tkinter.font as tkFont
+from tkinter import ttk
 OUTPUT_PATH = Path(__file__).parent
 ASSETS_PATH = OUTPUT_PATH / Path(r"D:\OneDrive Politechnika\OneDrive - Politechnika Warszawska\Kody\VSC Kody\GPS_data\build\assets\frame0")
 
@@ -24,8 +24,8 @@ def decimate(vals: List[float], n: int) -> Tuple[List[float], List[float]]:
     return vals_n
 
 def get_delta(vals: List[float]) -> List[float]:
-    #częstotliwość
-    f=1
+    #częstotliwość w hertzach
+    f=20
     dvals = [(vals[i+1] - vals[i])*f for i in range(len(vals)-1)]
     return dvals
 
@@ -72,10 +72,7 @@ def linear_regression(x_vals: List[float], y_vals: List[float]) -> Tuple[float, 
 V = []
 keepRunning= True
 
-serialInst = serial.Serial()
-serialInst.baudrate = 9600
-serialInst.port = "COM4"
-serialInst.open()
+
 
 def Export():
     print("This Button Exports files to excel")
@@ -84,6 +81,11 @@ def Export():
 
 def Start():
     global keepRunning
+    k=0
+    serialInst = serial.Serial()
+    serialInst.baudrate = 9600
+    serialInst.port = "COM4"
+    serialInst.open()
     while keepRunning:
         try:
             if serialInst.in_waiting:
@@ -91,6 +93,12 @@ def Start():
                 V_decoded = packet.decode('utf').rstrip('\n')
                 print(V_decoded)
                 V.append(V_decoded)
+                k=k+1
+                if k%2==0:
+                    entry_7.delete(0, END)
+                    entry_7.insert(0, V_decoded)
+                
+                
                 
                
         except serial.SerialException:  
@@ -1029,6 +1037,15 @@ canvas.create_text(
     fill="#000000",
     font=("Inter Bold", 32 * -1)
 )
+canvas.create_text(
+    22.0,
+    190.0,
+    anchor="nw",
+    text="Prędkość",
+    fill="#000000",
+    font=("Inter Regular", 20 * -1)
+)
+
 
 entry_image_1 = PhotoImage(
     file=relative_to_assets("entry_1.png"))
@@ -1129,6 +1146,50 @@ entry_5.place(
     width=161.0,
     height=46.0
 )
+entry_image_6 = PhotoImage(
+    file=relative_to_assets("entry_7.png"))
+entry_bg_6 = canvas.create_image(
+    109.5,
+    114.5,
+    image=entry_image_6
+)
+entry_6 = Entry(
+    bd=0,
+    bg="#D9D9D9",
+    fg="#000716",
+    highlightthickness=0,
+    justify="center",
+    font=("Inter Regular", 20 * -1)
+    
+)
+entry_6.place(
+    x=92.0,
+    y=94.0,
+    width=35.0,
+    height=39.0
+)
+
+entry_image_7 = PhotoImage(
+    file=relative_to_assets("entry_6.png"))
+entry_bg_7 = canvas.create_image(
+    120.5,
+    308.5,
+    image=entry_image_7
+)
+entry_7 = Entry(
+    bd=0,
+    bg="#D9D9D9",
+    fg="#FF1300",
+    highlightthickness=0,
+    justify="center",
+    font=("Inter Regular", 72 * -1)
+)
+entry_7.place(
+    x=24.0,
+    y=235.0,
+    width=193.0,
+    height=145.0
+)
 
 canvas.create_text(
     268.0,
@@ -1144,6 +1205,14 @@ canvas.create_text(
     143.0,
     anchor="nw",
     text="Powierzchnia czołowa [m^2]",
+    fill="#000000",
+    font=("Inter Regular", 12 * -1)
+)
+canvas.create_text(
+    20.0,
+    65.0,
+    anchor="nw",
+    text="Port na którym znajduje się GPS",
     fill="#000000",
     font=("Inter Regular", 12 * -1)
 )
