@@ -69,9 +69,12 @@ def linear_regression(x_vals: List[float], y_vals: List[float]) -> Tuple[float, 
     return r_squared, y_intercept, slope
 
 
+
+#### 
+global V
 V = []
 keepRunning= True
-
+####
 
 
 def Export():
@@ -84,7 +87,7 @@ def Start():
     k=0
     serialInst = serial.Serial()
     serialInst.baudrate = 9600
-    serialInst.port = "COM4"
+    serialInst.port = ("COM"+entry_1.get())
     serialInst.open()
     while keepRunning:
         try:
@@ -979,12 +982,18 @@ def calculateCx():
     plt.plot(v2, approx)
     #plt.plot(v2, approx_teoret)
     plt.plot(v2, dkg, 'o')
+
+    plt.xlabel("Kwadrat prędkości [m^2/s^2]")
+    plt.ylabel("dk/g*a")
+    
+    plt.show()
+    
     equation = str(np.polyfit(v2, dkg, 1))
     equation = equation.replace(" ", "x")
     equation = equation.replace("e", "*10^")
-    print(equation)
  
 
+    print(equation)
     # v(t) [km/h]
     #plt.plot([x/1000 for x in t_8], [x for x in v_8])
     # a(t) [m/s^2]
@@ -993,7 +1002,6 @@ def calculateCx():
     entry_4.insert(0, Cx)  # ustaw wartość zmiennej cx w polu tekstowym
     entry_5.insert(0, equation)  # ustaw wartość zmiennej cx w polu tekstowym
 
-    plt.show()
 
     
 
