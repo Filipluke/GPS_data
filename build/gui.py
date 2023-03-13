@@ -73,6 +73,7 @@ def linear_regression(x_vals: List[float], y_vals: List[float]) -> Tuple[float, 
 #### 
 global V
 V = []
+
 keepRunning= True
 ####
 
@@ -87,7 +88,7 @@ def Start():
     k=0
     serialInst = serial.Serial()
     serialInst.baudrate = 9600
-    serialInst.port = ("COM"+entry_1.get())
+    serialInst.port = ("COM"+entry_6.get())
     serialInst.open()
     while keepRunning:
         try:
@@ -110,6 +111,7 @@ def Start():
 def Break():
     global keepRunning
     keepRunning = False
+    #Wyświetlenie Wykresu prędkości
 
 def on_button2_clicked_Start():
     global keepRunning
@@ -947,7 +949,7 @@ def calculateCx():
                 3.230555555555556,
                 3.230555555555556]
   
-
+    
     # data processing
     # t = decimate(traw, 9)
     v = decimate(vraw, 9)
