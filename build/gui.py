@@ -25,7 +25,7 @@ def decimate(vals: List[float], n: int) -> Tuple[List[float], List[float]]:
 
 def get_delta(vals: List[float]) -> List[float]:
     #częstotliwość w hertzach
-    f=20
+    f=entry_8.get()
     dvals = [(vals[i+1] - vals[i])*f for i in range(len(vals)-1)]
     return dvals
 
@@ -73,7 +73,6 @@ def linear_regression(x_vals: List[float], y_vals: List[float]) -> Tuple[float, 
 #### 
 global V
 V = []
-
 keepRunning= True
 ####
 
@@ -1048,10 +1047,10 @@ canvas.create_text(
     font=("Inter Bold", 32 * -1)
 )
 canvas.create_text(
-    22.0,
-    190.0,
+    21.0,
+    131.0,
     anchor="nw",
-    text="Prędkość",
+    text="Prędkość Km/h",
     fill="#000000",
     font=("Inter Regular", 20 * -1)
 )
@@ -1159,8 +1158,8 @@ entry_5.place(
 entry_image_6 = PhotoImage(
     file=relative_to_assets("entry_7.png"))
 entry_bg_6 = canvas.create_image(
-    109.5,
-    114.5,
+    117.5,
+    92.5,
     image=entry_image_6
 )
 entry_6 = Entry(
@@ -1173,8 +1172,8 @@ entry_6 = Entry(
     
 )
 entry_6.place(
-    x=92.0,
-    y=94.0,
+    x=100.0,
+    y=72.0,
     width=35.0,
     height=39.0
 )
@@ -1182,8 +1181,8 @@ entry_6.place(
 entry_image_7 = PhotoImage(
     file=relative_to_assets("entry_6.png"))
 entry_bg_7 = canvas.create_image(
-    120.5,
-    308.5,
+    121.5,
+    237.5,
     image=entry_image_7
 )
 entry_7 = Entry(
@@ -1195,10 +1194,33 @@ entry_7 = Entry(
     font=("Inter Regular", 72 * -1)
 )
 entry_7.place(
-    x=24.0,
-    y=235.0,
+    x=25.0,
+    y=164.0,
     width=193.0,
     height=145.0
+)
+
+
+entry_image_8 = PhotoImage(
+    file=relative_to_assets("entry_8.png"))
+entry_bg_8 = canvas.create_image(
+    109.5,
+    413.5,
+    image=entry_image_8
+)
+entry_8 = Entry(
+    bd=0,
+    bg="#D9D9D9",
+    fg="#000716",
+    justify="center",
+    font=("Inter Regular", 20 * -1),
+    highlightthickness=0
+)
+entry_8.place(
+    x=92.0,
+    y=393.0,
+    width=35.0,
+    height=39.0
 )
 
 canvas.create_text(
@@ -1219,8 +1241,8 @@ canvas.create_text(
     font=("Inter Regular", 12 * -1)
 )
 canvas.create_text(
-    20.0,
-    65.0,
+    22.0,
+    30.0,
     anchor="nw",
     text="Port na którym znajduje się GPS",
     fill="#000000",
@@ -1250,6 +1272,14 @@ canvas.create_text(
     223.0,
     anchor="nw",
     text="Równanie Funkcji",
+    fill="#000000",
+    font=("Inter Regular", 12 * -1)
+)
+canvas.create_text(
+    55.0,
+    353.0,
+    anchor="nw",
+    text="Częstotliwość [Hz]",
     fill="#000000",
     font=("Inter Regular", 12 * -1)
 )
