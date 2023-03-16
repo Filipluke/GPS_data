@@ -8,6 +8,7 @@ import matplotlib.pyplot as plt
 import threading
 import tkinter.font as tkFont
 from tkinter import ttk
+import openpyxl
 OUTPUT_PATH = Path(__file__).parent
 ASSETS_PATH = OUTPUT_PATH / Path(r"D:\OneDrive Politechnika\OneDrive - Politechnika Warszawska\Kody\VSC Kody\GPS_data\build\assets\frame0")
 
@@ -25,8 +26,7 @@ def getMps(vals: List[float]) -> List[float]:
     return Vmps
 
 def get_delta(vals: List[float]) -> List[float]:
-    #częstotliwość w hertzach
-    
+    #frequency in hertz
     f=float(entry_8.get())
     dvals = [(vals[i+1] - vals[i])*f for i in range(len(vals)-1)]
     return dvals
@@ -74,16 +74,21 @@ def linear_regression(x_vals: List[float], y_vals: List[float]) -> Tuple[float, 
 
 #### 
 global V
-V = []
+global time
+V = [2,3,4,5,6,7,8]
 keepRunning= True
 ####
 
 
 def Export():
-    print("This Button Exports files to excel")
-
-
-
+    wb = openpyxl.Workbook()
+    ws = wb.active
+    ws.cell(row=1, column=1, value="V[Km/h]")
+    ws.cell(row=1, column=2, value="t[s]")
+    for i in range(len(V)):
+        ws.cell(row=i+2, column=1, value=V[i])
+        ws.cell(row=i+2, column=2, value=time[i])
+    wb.save('Pomiary.xlsx')
 def Start():
     global keepRunning
     k=0
@@ -101,7 +106,7 @@ def Start():
                 k=k+1
                 if k%2==0:
                     entry_7.delete(0, END)
-                    entry_7.insert(0, V_decoded)
+                    entry_7.insert(0, round(V_decoded, 1))
                 
                 
                 
@@ -112,8 +117,14 @@ def Start():
 def Break():
     global keepRunning
     keepRunning = False
+    global time
     #Wyświetlenie Wykresu prędkości
-
+    period= float(1/(float(entry_8.get())))
+    time = [period * i for i in range(len(V))]
+    plt.plot(time, V)
+    plt.xlabel('Czas [s]')
+    plt.ylabel('Prędkość[Km/h]')
+    plt.show()
 def on_button2_clicked_Start():
     global keepRunning
     keepRunning = True
