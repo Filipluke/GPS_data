@@ -83,12 +83,15 @@ keepRunning= True
 def Export():
     wb = openpyxl.Workbook()
     ws = wb.active
-    ws.cell(row=1, column=1, value="V[Km/h]")
-    ws.cell(row=1, column=2, value="t[s]")
+    ws.cell(row=1, column=1, value="lp")
+    ws.cell(row=1, column=2, value="V[Km/h]")
+    ws.cell(row=1, column=3, value="t[s]")
     for i in range(len(V)):
-        ws.cell(row=i+2, column=1, value=V[i])
-        ws.cell(row=i+2, column=2, value=time[i])
+        ws.cell(row=i+2, column=1, value=i+1)
+        ws.cell(row=i+2, column=2, value=V[i])
+        ws.cell(row=i+2, column=3, value=time[i])
     wb.save('Pomiary.xlsx')
+    
 def Start():
     global keepRunning
     k=0
