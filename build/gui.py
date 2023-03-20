@@ -9,8 +9,12 @@ import threading
 import tkinter.font as tkFont
 from tkinter import ttk
 import openpyxl
-OUTPUT_PATH = Path(__file__).parent
-ASSETS_PATH = OUTPUT_PATH / Path(r"D:\OneDrive Politechnika\OneDrive - Politechnika Warszawska\Kody\VSC Kody\GPS_data\build\assets\frame0")
+import os
+
+
+BASE_PATH = Path(os.path.dirname(os.path.abspath(__file__)))
+ASSETS_PATH = BASE_PATH / "assets" / "frame0"
+
 
 
 def relative_to_assets(path: str) -> Path:
