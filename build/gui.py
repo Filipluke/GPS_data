@@ -79,7 +79,7 @@ def linear_regression(x_vals: List[float], y_vals: List[float]) -> Tuple[float, 
 #### 
 global V
 global time
-V = [2,3,4,5,6,7,8]
+V = []
 keepRunning= True
 ####
 
@@ -98,7 +98,6 @@ def Export():
     
 def Start():
     global keepRunning
-    k=0
     serialInst = serial.Serial()
     serialInst.baudrate = 9600
     serialInst.port = ("COM"+entry_6.get())
@@ -107,13 +106,11 @@ def Start():
         try:
             if serialInst.in_waiting:
                 packet = serialInst.readline()
-                V_decoded = packet.decode('utf').rstrip('\n')
+                V_decoded = float(packet.decode('utf').rstrip('\n'))
                 print(V_decoded)
                 V.append(V_decoded)
-                k=k+1
-                if k%2==0:
-                    entry_7.delete(0, END)
-                    entry_7.insert(0, round(V_decoded, 1))
+                entry_7.delete(0, END)
+                entry_7.insert(0, round(V_decoded, 1))
                 
                 
                 
