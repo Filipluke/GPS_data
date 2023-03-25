@@ -108,7 +108,9 @@ def Start():
                 packet = serialInst.readline()
                 V_decoded = float(packet.decode('utf').rstrip('\n'))
                 print(V_decoded)
-                V.append(V_decoded)
+                if V_decoded != 0.0:
+                    V.append(V_decoded)
+                    
                 entry_7.delete(0, END)
                 entry_7.insert(0, round(V_decoded, 1))
                 
