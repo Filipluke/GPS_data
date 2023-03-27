@@ -48,7 +48,7 @@ def Start():
     global keepRunning
     serialInst = serial.Serial()
     serialInst.baudrate = 9600
-    serialInst.port = ("COM"+entry_6.get())
+    serialInst.port = ("COM"+entry_1.get())
     serialInst.open()
     while keepRunning:
         try:
@@ -59,8 +59,8 @@ def Start():
                 if V_decoded != 0.0:
                     V.append(V_decoded)
                     
-                entry_7.delete(0, END)
-                entry_7.insert(0, round(V_decoded, 1))
+                entry_3.delete(0, END)
+                entry_3.insert(0, round(V_decoded, 1))
                 
                 
                 
@@ -68,6 +68,8 @@ def Start():
         except serial.SerialException:  
             print("Urządzenie zostało odłączone")
             keepRunning = False
+
+
 def Break():
     global keepRunning
     keepRunning = False
@@ -75,11 +77,12 @@ def Break():
  
     period= float(1/(float(entry_2.get())))
     time = [period * i for i in range(len(V))]
-def on_button2_clicked_Start():
+
+
+def on_button1_clicked_Start():
     global keepRunning
     keepRunning = True
     threading.Thread(target=Start).start()
-
 
 
 
@@ -177,7 +180,7 @@ entry_3 = Entry(
     fg="#FF1300",
     highlightthickness=0,
     justify="center",
-    font=("Inter Regular", 72 * -1)
+    font=("Inter Regular", 100 * -1)
 )
 entry_3.place(
     x=126.0,
@@ -228,7 +231,7 @@ button_1 = Button(
     image=button_image_1,
     borderwidth=0,
     highlightthickness=0,
-    command=lambda: print("button_1 clicked"),
+    command=lambda: on_button1_clicked_Start(),
     relief="flat"
 )
 button_1.place(
@@ -244,7 +247,7 @@ button_2 = Button(
     image=button_image_2,
     borderwidth=0,
     highlightthickness=0,
-    command=lambda: print("button_2 clicked"),
+    command=lambda: Break(),
     relief="flat"
 )
 button_2.place(
@@ -260,7 +263,7 @@ button_3 = Button(
     image=button_image_3,
     borderwidth=0,
     highlightthickness=0,
-    command=lambda: print("button_3 clicked"),
+   command=lambda: Export(),
     relief="flat"
 )
 button_3.place(
