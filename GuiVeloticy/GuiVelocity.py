@@ -42,7 +42,7 @@ def Export():
         ws.cell(row=i+2, column=1, value=i+1)
         ws.cell(row=i+2, column=2, value=V[i])
         ws.cell(row=i+2, column=3, value=time[i])
-    wb.save('Pomiary.xlsx')
+    wb.save('Velocity.xlsx')
 
 def Start():
     global keepRunning
@@ -50,12 +50,37 @@ def Start():
     serialInst.baudrate = 9600
     serialInst.port = ("COM"+entry_1.get())
     serialInst.open()
+
+    fig, ax = plt.subplots()
+    line, = ax.plot([], [])
+    ax.set_xlim(0, 10)  # ustawienie granic osi X
+    ax.set_ylim(0, 50)
+    ax.set_xlabel('Czas [s]')  # dodanie jednostek do osi X
+    ax.set_ylabel('Prędkość')
+    ax.set_title('Prędkość w czasie rzeczywistym')
+    xdata, ydata = [], []
+    plt.show(block=False)
+
+
     while keepRunning:
         try:
             if serialInst.in_waiting:
                 packet = serialInst.readline()
                 V_decoded = float(packet.decode('utf').rstrip('\n'))
                 print(V_decoded)
+
+
+                y = float(V_decoded)
+                x = (len(xdata) + 1) * 0.1
+                xdata.append(x)
+                ydata.append(y)
+                line.set_data(xdata, ydata)
+                ax.relim()
+                ax.autoscale_view(True,True,True)
+                ax.set_xlim(x-10, x)  # aktualizacja osi X
+                fig.canvas.draw()
+                fig.canvas.flush_events()
+
                 if V_decoded != 0.0:
                     V.append(V_decoded)
                     
