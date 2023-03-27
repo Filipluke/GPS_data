@@ -72,8 +72,8 @@ def Break():
     global keepRunning
     keepRunning = False
     global time
-    #Wyświetlenie Wykresu prędkości
-    period= float(1/(float(entry_8.get())))
+ 
+    period= float(1/(float(entry_2.get())))
     time = [period * i for i in range(len(V))]
 def on_button2_clicked_Start():
     global keepRunning
