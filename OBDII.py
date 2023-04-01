@@ -2,7 +2,9 @@ import obd
 import time
 import matplotlib.pyplot as plt
 import openpyxl
+
 # Konfiguracja połączenia z portem OBD II
+
 connection = obd.OBD() 
 #excel
 

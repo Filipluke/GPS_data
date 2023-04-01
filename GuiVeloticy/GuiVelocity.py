@@ -10,6 +10,7 @@ import tkinter.font as tkFont
 from tkinter import ttk
 import openpyxl
 import os
+import time
 
 BASE_PATH = Path(os.path.dirname(os.path.abspath(__file__)))
 ASSETS_PATH = BASE_PATH / "assets" / "frame0"
@@ -27,8 +28,9 @@ window.configure(bg = "#FFFFFF")
 
 #### 
 global V
-global time
+global Czas
 V = []
+Czas = []
 keepRunning= True
 ####
 
@@ -38,30 +40,33 @@ def Export():
     ws.cell(row=1, column=1, value="lp")
     ws.cell(row=1, column=2, value="V[Km/h]")
     ws.cell(row=1, column=3, value="t[s]")
-    for i in range(len(V)):
+    for i in range(len(V)-1):
         ws.cell(row=i+2, column=1, value=i+1)
         ws.cell(row=i+2, column=2, value=V[i])
-        ws.cell(row=i+2, column=3, value=time[i])
+        ws.cell(row=i+2, column=3, value=Czas[i])
     wb.save('Velocity.xlsx')
 
 def Start():
     global keepRunning
+    global Czas
     serialInst = serial.Serial()
     serialInst.baudrate = 9600
     serialInst.port = ("COM"+entry_1.get())
     serialInst.open()
+    
 
     fig, ax = plt.subplots()
     line, = ax.plot([], [])
     ax.set_xlim(0, 10)  # ustawienie granic osi X
-    ax.set_ylim(0, 50)
+    ax.set_ylim(0, 100)
     ax.set_xlabel('Czas [s]')  # dodanie jednostek do osi X
     ax.set_ylabel('Prędkość')
     ax.set_title('Prędkość w czasie rzeczywistym')
     xdata, ydata = [], []
     plt.show(block=False)
 
-
+    start_time = time.time()
+    
     while keepRunning:
         try:
             if serialInst.in_waiting:
@@ -71,7 +76,7 @@ def Start():
 
 
                 y = float(V_decoded)
-                x = (len(xdata) + 1) * 0.1
+                x = time.time() - start_time
                 xdata.append(x)
                 ydata.append(y)
                 line.set_data(xdata, ydata)
@@ -83,6 +88,7 @@ def Start():
 
                 if V_decoded != 0.0:
                     V.append(V_decoded)
+                    Czas.append(x)
                     
                 entry_3.delete(0, END)
                 entry_3.insert(0, round(V_decoded, 1))
@@ -98,11 +104,8 @@ def Start():
 def Break():
     global keepRunning
     keepRunning = False
-    global time
+    
  
-    period= float(1/(float(entry_2.get())))
-    time = [period * i for i in range(len(V))]
-
 
 def on_button1_clicked_Start():
     global keepRunning

@@ -78,11 +78,11 @@ def linear_regression(x_vals: List[float], y_vals: List[float]) -> Tuple[float, 
 
 #### 
 global V
-global time
+global Czas
 V = []
+Czas = []
 keepRunning= True
 ####
-
 
 def Export():
     wb = openpyxl.Workbook()
@@ -90,10 +90,10 @@ def Export():
     ws.cell(row=1, column=1, value="lp")
     ws.cell(row=1, column=2, value="V[Km/h]")
     ws.cell(row=1, column=3, value="t[s]")
-    for i in range(len(V)):
+    for i in range(len(V)-1):
         ws.cell(row=i+2, column=1, value=i+1)
         ws.cell(row=i+2, column=2, value=V[i])
-        ws.cell(row=i+2, column=3, value=time[i])
+        ws.cell(row=i+2, column=3, value=Czas[i])
     wb.save('Pomiary.xlsx')
     
 def Start():
@@ -102,14 +102,17 @@ def Start():
     serialInst.baudrate = 9600
     serialInst.port = ("COM"+entry_6.get())
     serialInst.open()
+    start_time = time.time()
     while keepRunning:
         try:
             if serialInst.in_waiting:
                 packet = serialInst.readline()
                 V_decoded = float(packet.decode('utf').rstrip('\n'))
+                x = time.time() - start_time
                 print(V_decoded)
                 if V_decoded != 0.0:
                     V.append(V_decoded)
+                    Czas.append(x)
                     
                 entry_7.delete(0, END)
                 entry_7.insert(0, round(V_decoded, 1))
@@ -125,8 +128,6 @@ def Break():
     keepRunning = False
     global time
     #Wyświetlenie Wykresu prędkości
-    period= float(1/(float(entry_8.get())))
-    time = [period * i for i in range(len(V))]
     plt.plot(time, V)
     plt.xlabel('Czas [s]')
     plt.ylabel('Prędkość[Km/h]')
