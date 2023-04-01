@@ -1,2 +1,0 @@
-type COM3 >> data.log
-plik zapisany bedzie w C:/Users/filip/data.log
