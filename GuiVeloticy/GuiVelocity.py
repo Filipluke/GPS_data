@@ -24,8 +24,6 @@ window = Tk()
 window.geometry("478x698")
 window.configure(bg = "#FFFFFF")
 
-
-
 #### 
 global V
 global Czas
@@ -57,10 +55,10 @@ def Start():
 
     fig, ax = plt.subplots()
     line, = ax.plot([], [])
-    ax.set_xlim(0, 10)  # ustawienie granic osi X
+    ax.set_xlim(0, 10) 
     ax.set_ylim(0, 100)
-    ax.set_xlabel('Czas [s]')  # dodanie jednostek do osi X
-    ax.set_ylabel('Prędkość')
+    ax.set_xlabel('Czas [s]')  
+    ax.set_ylabel('Prędkość [Km/h]')
     ax.set_title('Prędkość w czasie rzeczywistym')
     xdata, ydata = [], []
     plt.show(block=False)
@@ -154,7 +152,7 @@ canvas.create_text(
 entry_image_1 = PhotoImage(
     file=relative_to_assets("entry_1.png"))
 entry_bg_1 = canvas.create_image(
-    109.5,
+    225.5,
     148.5,
     image=entry_image_1
 )
@@ -167,33 +165,14 @@ entry_1 = Entry(
     font=("Inter Regular", 20 * -1)
 )
 entry_1.place(
-    x=70.0,
+    x=186.0,
     y=128.0,
     width=79.0,
     height=39.0
 )
 
-entry_image_2 = PhotoImage(
-    file=relative_to_assets("entry_2.png"))
-entry_bg_2 = canvas.create_image(
-    375.5,
-    148.5,
-    image=entry_image_2
-)
-entry_2 = Entry(
-    bd=0,
-    bg="#D9D9D9",
-    fg="#000716",
-    highlightthickness=0,
-    justify="center",
-    font=("Inter Regular", 20 * -1)
-)
-entry_2.place(
-    x=323.0,
-    y=128.0,
-    width=105.0,
-    height=39.0
-)
+
+
 
 entry_image_3 = PhotoImage(
     file=relative_to_assets("entry_3.png"))
@@ -217,17 +196,10 @@ entry_3.place(
     height=171.0
 )
 
-canvas.create_text(
-    305.0,
-    100.0,
-    anchor="nw",
-    text="Częstotliwość [Hz]",
-    fill="#000000",
-    font=("Inter Regular", 16 * -1)
-)
+
 
 canvas.create_text(
-    50.0,
+    180.0,
     100.0,
     anchor="nw",
     text="Numer portu",
