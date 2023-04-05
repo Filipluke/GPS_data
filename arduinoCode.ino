@@ -3,9 +3,7 @@
 
 static const int RXPin = 4, TXPin = 3;
 static const uint32_t GPSBaud = 9600;
-
 TinyGPSPlus gps;
-
 SoftwareSerial ss(RXPin, TXPin);
 
 void setup()
@@ -31,21 +29,7 @@ void loop()
 
 void displayInfo()
 {
-  //Serial.print(F("Location: ")); 
-  if (gps.location.isValid())
-  {
-   // Serial.print(gps.location.lat(), 6);
-   //  Serial.print(F(", "));
-   // Serial.print(gps.location.lng(), 6);
-   // Serial.print(F(", "));
-   // Serial.print(millis());
-   //  Serial.print(F(", "));
-  }
-  else
-  {
-    Serial.print(F("INVALID "));
-    //diode light on/off
-  }
+
 
   //Serial.print(F("  Date "));
   if (gps.date.isValid())
@@ -62,10 +46,9 @@ void displayInfo()
   }
   else
   {
-    Serial.print(F("INVALID "));
+    Serial.print(F("0"));
     
   }
 
-  
   Serial.println();
 }
