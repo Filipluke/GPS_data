@@ -4,7 +4,7 @@ import pandas as pd
 import numpy as np
 
 # Wczytanie danych z pliku CSV
-with open('Pomiar_1OBD.csv', 'r') as csvfile:
+with open('Analiza/Pomiar_1OBD.csv', 'r') as csvfile:
     csvreader = csv.reader(csvfile, delimiter=';')  # separator to średnik
     next(csvreader) # pomiń nagłówek
     czas = []
@@ -14,7 +14,7 @@ with open('Pomiar_1OBD.csv', 'r') as csvfile:
         predkosc.append(float(row[1]))
 
 # Wczytanie danych z pliku Excela
-df = pd.read_excel('Pomiary_1GPS.xlsx', usecols=[0,1])
+df = pd.read_excel('Analiza/Pomiary_1GPS.xlsx', usecols=[0,1])
 czas_gps =  df.iloc[:,1]
 predkosc_gps = df.iloc[:,0].astype(float)  # zmiana typu wartości na float
 
