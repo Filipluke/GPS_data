@@ -82,7 +82,7 @@ def Start():
             if serialInst.in_waiting:
                 packet = serialInst.readline()
                 V_decoded = float(packet.decode('utf').rstrip('\n'))
-                print(V_decoded)
+                
 
                 y = float(V_decoded)
                 x = time.time() - start_time
