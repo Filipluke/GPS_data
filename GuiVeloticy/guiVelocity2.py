@@ -16,20 +16,24 @@ from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 BASE_PATH = Path(os.path.dirname(os.path.abspath(__file__)))
 ASSETS_PATH = BASE_PATH / "assets" / "frame0"
 
+
 def relative_to_assets(path: str) -> Path:
     return ASSETS_PATH / Path(path)
 
+
 window = Tk()
 window.geometry("1100x700")
-window.configure(bg = "#FFFFFF")
+window.configure(bg="#FFFFFF")
 
-#### 
+####
 global V
 global Czas
 V = []
 Czas = []
-keepRunning= True
+keepRunning = True
 ####
+
+
 def Export():
     wb = openpyxl.Workbook()
     ws = wb.active
@@ -41,6 +45,8 @@ def Export():
         ws.cell(row=i+2, column=2, value=V[i])
         ws.cell(row=i+2, column=3, value=Czas[i])
     wb.save('Velocity.xlsx')
+
+
 def Start():
     global keepRunning
     global Czas
@@ -51,9 +57,9 @@ def Start():
 
     fig, ax = plt.subplots()
     line, = ax.plot([], [])
-    ax.set_xlim(0, 10) 
+    ax.set_xlim(0, 10)
     ax.set_ylim(0, 100)
-    ax.set_xlabel('Czas [s]')  
+    ax.set_xlabel('Czas [s]')
     ax.set_ylabel('Prędkość [Km/h]')
     ax.set_title('Prędkość w czasie rzeczywistym')
     xdata, ydata = [], []
@@ -75,22 +81,25 @@ def Start():
     canvas_agg.draw()
     canvas_agg.get_tk_widget().pack(side='top', fill='both', expand=1)
 
-    start_time = time.time()
-
+    flag = False
     while keepRunning:
         try:
             if serialInst.in_waiting:
                 packet = serialInst.readline()
                 V_decoded = float(packet.decode('utf').rstrip('\n'))
-                
 
                 y = float(V_decoded)
-                x = time.time() - start_time
+                if not flag:
+                    start_time = time.time()
+                    flag = True
+                    x = 0
+                else:
+                    x = time.time() - start_time
                 xdata.append(x)
                 ydata.append(y)
                 line.set_data(xdata, ydata)
                 ax.relim()
-                ax.autoscale_view(True,True,True)
+                ax.autoscale_view(True, True, True)
                 ax.set_xlim(x-10, x)  # aktualizacja osi X
                 fig.canvas.draw()
                 fig.canvas.flush_events()
@@ -102,7 +111,7 @@ def Start():
                 entry_3.delete(0, END)
                 entry_3.insert(0, round(V_decoded, 1))
 
-        except serial.SerialException:  
+        except serial.SerialException:
             print("Urządzenie zostało odłączone")
             keepRunning = False
 
@@ -110,9 +119,11 @@ def Start():
     plt.close(fig)
     plot_canvas.destroy()
 
+
 def Break():
     global keepRunning
     keepRunning = False
+
 
 def on_button1_clicked_Start():
     global keepRunning
@@ -122,15 +133,15 @@ def on_button1_clicked_Start():
 
 canvas = Canvas(
     window,
-    bg = "#FFFFFF",
-    height = 698,
-    width = 478,
-    bd = 0,
-    highlightthickness = 0,
-    relief = "ridge"
+    bg="#FFFFFF",
+    height=698,
+    width=478,
+    bd=0,
+    highlightthickness=0,
+    relief="ridge"
 )
 
-canvas.place(x = 0, y = 0)
+canvas.place(x=0, y=0)
 canvas.create_rectangle(
     0.0,
     0.0,
@@ -180,8 +191,6 @@ entry_1.place(
 )
 
 
-
-
 entry_image_3 = PhotoImage(
     file=relative_to_assets("entry_3.png"))
 entry_bg_3 = canvas.create_image(
@@ -203,7 +212,6 @@ entry_3.place(
     width=233.0,
     height=171.0
 )
-
 
 
 canvas.create_text(
@@ -271,7 +279,7 @@ button_3 = Button(
     image=button_image_3,
     borderwidth=0,
     highlightthickness=0,
-   command=lambda: Export(),
+    command=lambda: Export(),
     relief="flat"
 )
 button_3.place(
