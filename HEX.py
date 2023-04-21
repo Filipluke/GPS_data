@@ -36,6 +36,11 @@ time.sleep(1)
 data = bytearray.fromhex(
     '24 45 49 47 50 51 2c 47 53 56 2a 32 34 0d 0a b5 62 06 01 03 00 f0 03 00 fd 15')
 ser.write(data)
+# set 10 HZ
+time.sleep(1)
+data = bytearray.fromhex(
+    'B5 62 06 08 06 00 64 00 01 00 01 00 7A 12 B5 62 06 08 00 00 0E 30')
+ser.write(data)
 time.sleep(1)
 
 
