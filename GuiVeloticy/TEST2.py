@@ -47,9 +47,9 @@ def Export():
     ws.cell(row=1, column=4, value="tGPS[s]")
     for i in range(len(V)-1):
         ws.cell(row=i+2, column=1, value=i+1)
-        ws.cell(row=i+2, column=2, value=Czas[i])
-        ws.cell(row=i+2, column=3, value=V[i])
-    wb.save('VelocityGPS.xlsx')
+        ws.cell(row=i+2, column=2, value=V[i])
+        ws.cell(row=i+2, column=3, value=Czas[i])
+    wb.save('VelocityTest.xlsx')
 
 
 def Start():
@@ -86,7 +86,7 @@ def Start():
     canvas_agg.draw()
     canvas_agg.get_tk_widget().pack(side='top', fill='both', expand=1)
 
-    x = 0
+    flag = False
     while keepRunning:
         try:
             if serialInst.in_waiting:
@@ -94,7 +94,12 @@ def Start():
                 V_decoded = float(packet.decode('utf').rstrip('\n'))
 
                 y = float(V_decoded)
-
+                if not flag:
+                    start_time = time.time()
+                    flag = True
+                    x = 0
+                else:
+                    x = time.time() - start_time
                 xdata.append(x)
                 ydata.append(y)
                 line.set_data(xdata, ydata)
@@ -107,7 +112,6 @@ def Start():
                 if V_decoded != 0.0:
                     V.append(V_decoded)
                     Czas.append(x)
-                    x += 0.1
 
                 entry_3.delete(0, END)
                 entry_3.insert(0, round(V_decoded, 1))
