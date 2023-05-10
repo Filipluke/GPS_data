@@ -2,11 +2,13 @@ import serial
 import time
 # Ustawienie parametrów portu szeregowego
 ser = serial.Serial()
-ser.port = 'COM5'
 ser.baudrate = 9600
 ser.bytesize = serial.EIGHTBITS
 ser.parity = serial.PARITY_NONE
 ser.stopbits = serial.STOPBITS_ONE
+print('Wpisz numer portu:')
+port = "COM" + input()
+ser.port = port
 
 # Otwarcie portu szeregowego
 ser.open()

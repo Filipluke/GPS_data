@@ -24,7 +24,7 @@ def relative_to_assets(path: str) -> Path:
 window = Tk()
 window.geometry("1100x700")
 window.configure(bg="#FFFFFF")
-
+window.title("ProgramGPS")
 ####
 global V
 global Czas
