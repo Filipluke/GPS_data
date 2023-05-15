@@ -42,9 +42,8 @@ def Export():
     wb = openpyxl.Workbook()
     ws = wb.active
     ws.cell(row=1, column=1, value="lp")
-    ws.cell(row=1, column=2, value="V[Km/h]")
-    ws.cell(row=1, column=3, value="t[s]")
-
+    ws.cell(row=1, column=2, value="t[s]")
+    ws.cell(row=1, column=3, value="V[km/h]")
     for i in range(len(V)-1):
         ws.cell(row=i+2, column=1, value=i+1)
         ws.cell(row=i+2, column=2, value=Czas[i])
