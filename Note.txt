@@ -1,0 +1,8 @@
+Traceback (most recent call last):
+  File "/home/filip/GPS_data/Main/Main.py", line 14, in <module>
+    from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
+  File "/home/filip/.local/lib/python3.9/site-packages/matplotlib/backends/backend_tkagg.py", line 1, in <module>
+    from . import _backend_tk
+  File "/home/filip/.local/lib/python3.9/site-packages/matplotlib/backends/_backend_tk.py", line 15, in <module>
+    from PIL import Image, ImageTk
+ImportError: cannot import name 'ImageTk' from 'PIL' (/usr/lib/python3/dist-packages/PIL/__init__.py)
