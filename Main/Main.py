@@ -56,7 +56,7 @@ def Start():
     global Czas
     serialInst = serial.Serial()
     serialInst.baudrate = 9600
-    serialInst.port = ("COM"+entry_1.get())
+    serialInst.port = ("COM6")
     serialInst.open()
 
     fig, ax = plt.subplots()
@@ -68,40 +68,14 @@ def Start():
     ax.set_title('Prędkość w czasie rzeczywistym')
     xdata, ydata = [], []
 
-    # Create a new canvas for the plot
-    plot_canvas = Canvas(
-        window,
-        bg="#FFFFFF",
-        height=600,
-        width=400,
-        bd=0,
-        highlightthickness=0,
-        relief="ridge"
-    )
-    plot_canvas.place(x=480, y=50)
-
-    # Display the plot on the new canvas
-    canvas_agg = FigureCanvasTkAgg(fig, master=plot_canvas)
-    canvas_agg.draw()
-    canvas_agg.get_tk_widget().pack(side='top', fill='both', expand=1)
-
     x = 0
     while keepRunning:
         try:
             if serialInst.in_waiting:
                 packet = serialInst.readline()
-                V_decoded = float(packet.decode('utf').rstrip('\n'))
+                V_decoded = float(packet.decode('utf').rstrip('\r'))
 
                 y = float(V_decoded)
-
-                xdata.append(x)
-                ydata.append(y)
-                line.set_data(xdata, ydata)
-                ax.relim()
-                ax.autoscale_view(True, True, True)
-                ax.set_xlim(x-10, x)  # aktualizacja osi X
-                fig.canvas.draw()
-                fig.canvas.flush_events()
 
                 if V_decoded != 0.0:
                     V.append(V_decoded)
@@ -114,10 +88,6 @@ def Start():
         except serial.SerialException:
             print("Urządzenie zostało odłączone")
             keepRunning = False
-
-    # Clean up
-    plt.close(fig)
-    plot_canvas.destroy()
 
 
 def Break():
