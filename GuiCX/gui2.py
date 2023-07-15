@@ -11,10 +11,9 @@ from tkinter import ttk
 import openpyxl
 import os
 
-
+# 2
 BASE_PATH = Path(os.path.dirname(os.path.abspath(__file__)))
 ASSETS_PATH = BASE_PATH / "assets" / "frame0"
-
 
 
 def relative_to_assets(path: str) -> Path:
@@ -25,43 +24,49 @@ window = Tk()
 
 
 def getMps(vals: List[float]) -> List[float]:
-    
+
     Vmps = [vals[i]/3.6 for i in range(len(vals))]
     return Vmps
 
+
 def get_delta(vals: List[float]) -> List[float]:
-    #frequency in hertz
-    f=float(entry_8.get())
+    # frequency in hertz
+    f = float(entry_8.get())
     dvals = [(vals[i+1] - vals[i])*f for i in range(len(vals)-1)]
     return dvals
+
 
 def get_negatives(vals: List[float]) -> List[float]:
     vals_neg = [val for val in vals if val < 0]
     return vals_neg
 
+
 def get_dkg(d_v: List[float]) -> List[float]:
     dkg = [0.1 * val for val in d_v]
     return dkg
+
 
 def get_v2(v: List[float], dvNeg: List[float]) -> List[float]:
     v2 = [v[i+1] * v[i+1] for i in range(len(dvNeg))]
     return v2
 
+
 def linear_regression(x_vals: List[float], y_vals: List[float]) -> Tuple[float, float, float]:
     if len(x_vals) != len(y_vals):
         raise ValueError("Input values differ in length.")
-    
+
     sum_of_x = sum(x_vals)
     sum_of_y = sum(y_vals)
     sum_of_x_sq = sum(x*x for x in x_vals)
     sum_of_y_sq = sum(y*y for y in y_vals)
-    sum_codeviates = sum(x*y for x,y in zip(x_vals, y_vals))
+    sum_codeviates = sum(x*y for x, y in zip(x_vals, y_vals))
 
     count = len(x_vals)
     ss_x = sum_of_x_sq - ((sum_of_x * sum_of_x) / count)
 
     r_numerator = (count * sum_codeviates) - (sum_of_x * sum_of_y)
-    r_denom = (count * sum_of_x_sq - (sum_of_x * sum_of_x)) * (count * sum_of_y_sq - (sum_of_y * sum_of_y))
+    r_denom = (count * sum_of_x_sq - (sum_of_x * sum_of_x)) * \
+        (count * sum_of_y_sq - (sum_of_y * sum_of_y))
     s_co = sum_codeviates - ((sum_of_x * sum_of_y) / count)
 
     mean_x = sum_of_x / count
@@ -75,12 +80,11 @@ def linear_regression(x_vals: List[float], y_vals: List[float]) -> Tuple[float, 
     return r_squared, y_intercept, slope
 
 
-
-#### 
+####
 global V
 global time
 V = []
-keepRunning= True
+keepRunning = True
 ####
 
 
@@ -95,9 +99,7 @@ def Export():
         ws.cell(row=i+2, column=2, value=V[i])
         ws.cell(row=i+2, column=3, value=time[i])
     wb.save('Pomiary.xlsx')
-    
 
-  
 
 def Start():
     global keepRunning
@@ -105,7 +107,6 @@ def Start():
     serialInst.baudrate = 9600
     serialInst.port = ("COM"+entry_6.get())
     serialInst.open()
-
 
     fig, ax = plt.subplots()
     line, = ax.plot([], [])
@@ -127,39 +128,35 @@ def Start():
                 V_decoded = float(packet.decode('utf').rstrip('\n'))
                 print(V_decoded)
 
-
                 y = float(V_decoded)
                 x = (len(xdata) + 1) * 0.1  # zmiana wartości na osi X
                 xdata.append(x)
                 ydata.append(y)
                 line.set_data(xdata, ydata)
                 ax.relim()
-                ax.autoscale_view(True,True,True)
+                ax.autoscale_view(True, True, True)
                 ax.set_xlim(x-10, x)  # aktualizacja osi X
                 fig.canvas.draw()
                 fig.canvas.flush_events()
 
-
-
                 if V_decoded != 0.0:
                     V.append(V_decoded)
-                    
+
                 entry_7.delete(0, END)
                 entry_7.insert(0, round(V_decoded, 1))
-                
-                
-               
-        except serial.SerialException:  
+
+        except serial.SerialException:
             print("Urządzenie zostało odłączone")
             keepRunning = False
-        
+
+
 def Break():
 
     global keepRunning
     keepRunning = False
     global time
-    
-    period= float(1/(float(entry_8.get())))
+
+    period = float(1/(float(entry_8.get())))
     time = [period * i for i in range(len(V))]
 
 
@@ -170,8 +167,6 @@ def on_button2_clicked_Start():
 
 
 def calculateCx():
-  
-
 
     VMps = getMps(V)
     dv = get_delta(VMps)
@@ -182,10 +177,10 @@ def calculateCx():
     r2, b, a = linear_regression(v2, dkg)
 
     # constants
-    m =float( entry_1.get())
+    m = float(entry_1.get())
     g = 9.81
-    p = float( entry_2.get())
-    A = float( entry_3.get())
+    p = float(entry_2.get())
+    A = float(entry_3.get())
 
     # m = 1200
     # p = 1.2
@@ -197,53 +192,47 @@ def calculateCx():
     print(f"Cx = {Cx}")
     print(V[0])
     print(VMps[0])
-    
 
-    
-    approx = [a*x +b for x in v2]
+    approx = [a*x + b for x in v2]
 
-    #approx_teoret = [-4.2e-05*x -0.0137 for x in v2]
+    # approx_teoret = [-4.2e-05*x -0.0137 for x in v2]
     plt.plot(v2, approx)
-    #plt.plot(v2, approx_teoret)
+    # plt.plot(v2, approx_teoret)
     plt.plot(v2, dkg, 'o')
 
     plt.xlabel("Kwadrat prędkości [m^2/s^2]")
     plt.ylabel("dk/g*a")
-    
+
     plt.show()
-    
+
     equation = str(np.polyfit(v2, dkg, 1))
     equation = equation.replace(" ", "x")
     equation = equation.replace("e", "*10^")
- 
 
     print(equation)
     # v(t) [km/h]
-    #plt.plot([x/1000 for x in t_8], [x for x in v_8])
+    # plt.plot([x/1000 for x in t_8], [x for x in v_8])
     # a(t) [m/s^2]
-    #plt.plot([x/1000 for x in t_8[1:]], [x/3.6 for x in dv_8])
+    # plt.plot([x/1000 for x in t_8[1:]], [x/3.6 for x in dv_8])
 
     entry_4.insert(0, Cx)  # ustaw wartość zmiennej cx w polu tekstowym
     entry_5.insert(0, equation)  # ustaw wartość zmiennej cx w polu tekstowym
 
 
-    
-
-
 window.geometry("700x500")
-window.configure(bg = "#FFFFFF")
+window.configure(bg="#FFFFFF")
 
 canvas = Canvas(
     window,
-    bg = "#FFFFFF",
-    height = 500,
-    width = 700,
-    bd = 0,
-    highlightthickness = 0,
-    relief = "ridge"
+    bg="#FFFFFF",
+    height=500,
+    width=700,
+    bd=0,
+    highlightthickness=0,
+    relief="ridge"
 )
 
-canvas.place(x = 0, y = 0)
+canvas.place(x=0, y=0)
 canvas.create_rectangle(
     0.0,
     0.0,
@@ -392,7 +381,7 @@ entry_6 = Entry(
     highlightthickness=0,
     justify="center",
     font=("Inter Regular", 20 * -1)
-    
+
 )
 entry_6.place(
     x=100.0,
